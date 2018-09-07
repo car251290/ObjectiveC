@@ -14,20 +14,25 @@
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         BOOL gameOn = YES;
-        //float Scorekeeper = 0.0;
-        while(gameOn){
-            Additionquestion *q = [[Additionquestion alloc] init]; // [AdditionQuestion new]; same
-            NSString *userAnswer = [inputHandler getUserInputWithLength: 10 widthPrompt:[q question]];
+        NSInteger positiveC = 0;
+        NSInteger negativeC = 0;
+        while (gameOn) {
+            AdditionQuestion *q = [AdditionQuestion new];
+            NSString *userAnswer = [InputHandler getUserInputWithLength:10 widthPrompt: [q question]];
             NSInteger userAnsInt = [userAnswer integerValue];
-            //NSUInteger userScoreAnsInt =[userScore  intergerValue];
-            if([q answer] == userAnsInt){
+            NSString *scoreOutput = [ScoreKeeper totalScore:positiveC count:negativeC];
+            if ([q answer] == userAnsInt) {
                 NSLog(@"Right!");
-            } else if([userAnswer isEqualToString:@"quit"]){
+                positiveC++;
+                NSLog(@"%@", scoreOutput);
+                
+            } else if([userAnswer isEqualToString:@"quit"]) {
                 gameOn = NO;
             } else {
                 NSLog(@"Wrong!");
+                negativeC++;
+                NSLog(@"%@", scoreOutput);
             }
-            
         }
     }
     return 0;

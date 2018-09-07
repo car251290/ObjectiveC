@@ -9,21 +9,30 @@
 #import "ScoreKeeper.h"
 
 @implementation ScoreKeeper
--(instancetype) init
-{
-    self = [super init];
-    if(self){
-       // generate 2 random ints arc4random_uniform
-        int right= 2;
-        int left = 0;
-         //make string representation
-        _right = [NSString stringWithFormat:@"%d+%d=",left ,right];
-         //get the answer and assign to answer
-        _wrong_answer = left + right;
-        
-    }
-    return self;
-    
-}
 
+//- (instancetype)init
+//{
+//    self = [super init];
+//    if (self) {
+//
+//
+//        // increment positive
+//        _positive = _positive + 1;
+//
+//        // increment negative
+//        _negative = _negative + 1;
+//
+//        // check the average
+//        NSInteger sumAnswers = _negative + _positive;
+//        NSInteger average = (_positive * 100) / sumAnswers;
+//    }
+//    return self;
+
++ (NSString *) totalScore: (NSInteger) pos count: (NSInteger) neg {
+    
+    NSInteger sumAnswers = neg + pos;
+    NSInteger average = (pos * 100) / sumAnswers;
+    NSString *result = [NSString stringWithFormat:@"Score: %d right, %0ld wrong ---- %2ld%%", pos, neg, average];
+    return result;
+}
 @end

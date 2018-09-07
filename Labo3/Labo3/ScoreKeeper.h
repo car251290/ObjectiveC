@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface ScoreKeeper : NSObject
-+(NSString *)getUserInputWithLength:(int) maxright widthPrompt:(NSString *)prompt;
-@property(nonatomic,assign) NSInteger *right;
-@property (nonatomic,assign)NSInteger wrong;
+
+@property (nonatomic, assign) NSInteger positiveCount;
+@property (nonatomic, assign) NSInteger negativeCount;
+
++ (NSString *) totalScore: (NSInteger) pos count: (NSInteger) neg;
 
 @end
