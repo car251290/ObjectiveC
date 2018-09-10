@@ -12,41 +12,47 @@
 #import "ContactList.h"
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        ContactList *contactlist=[[ContactList alloc]init];
+        ContactList *contactList = [[ContactList alloc]init];
+        inputHandler *inputHistory = [inputHandler new];
         
-        while(true){
+        while (true) {
+            NSString *menu = @"\nWhat would you like to do next?\nnew - Create a new contact\nlist - List all contacts\nquit - Exit Applicatiom\n> _";
+            NSString * option = [inputHandler getUserInputWithLength:20 widthPrompt:menu];
+            NSLog(@"%@", option);
             
-            NSString *menu= @"What would you like to do next?  new list?";
-            NSString *option =[inputHandler getUserInputWithLength:20 widthPrompt:menu];
-            NSInteger number = [inputHandler getUserInputWithLength:20 widthPrompt:menu];
-            
-            if([option isEqualToString: @"quit"]){
-                 break;
-            }else if ([option isEqualToString: @"new"]){
-                //1. get user input for name and email
+            if ([option isEqualToString:@"quit"]) {
+                break;
+            }else if([option isEqualToString:@"new"]){
+                NSString *name = [inputHandler getUserInputWithLength:255 widthPrompt:@"Input the name: "];
+                NSString *email = [inputHandler getUserInputWithLength:255 widthPrompt:@"Input the email: "];
                 
-                NSString *name=[inputHandler getUserInputWithLength:255 widthPrompt:@"enter the name"];
-                NSString *email=[inputHandler getUserInputWithLength:255 widthPrompt:@"enter the email"];
-                NSString *id = [inputHandler getUserInputWithLength:255 widthPrompt:@"enter the id"];
-                NSInteger number = [inputHandler getUserInputWithLength:255 widthPrompt:@"enter the number"];
+                if([ContactList findDuplicate:email] == TRUE){
+                    NSLog(@"This Email already exists");
+                }else{
+                    
+                    contact *newcontact = [[contact alloc] initWithName:name andEmail:email];
+                    
+                    [contactList addcontact:newcontact];
+                }
                 
-
-                //2 create a contact object based on the user
-                contact *newContact = [[contact alloc]initWithname:name andemail:email andid:id andnumber:number];
-                
-                // 3 add the contact to contactlist contactlist
-                [contactlist addcontact:newContact];
-                
-            
             }else if ([option isEqualToString:@"list"]){
-                NSLog(@"%@",contactlist);
+                NSLog(@"%@", contactList);
+                
+            }else if([option isEqualToString:@"find"]){
+                [[inputHistory inputHistory]addObject:option];
+                NSString *search = [inputHandler getUserInputWithLength:255 withPrompt:@"Enter the search word"];
+                 contact *result = [ContactList findcontact:search];
+                if(result != nil){
+                    NSLog(@"<%@> (%@)",[result name],[result email]);
+                }else{
+                    NSLog(@"%@", @"Not found");
+                }
+            }else if([option isEqualToString:@"history"]){
+                NSLog(@"%@", inputHistory);
+                [[inputhistory inputhistory]addObject:option];
             }
-            
-            
         }
-        //[[[contact alloc]initWithName:@"john smith" andemail:@"js@email.com"]];
-        //NSlog(@"%@",contact);
-      
     }
-    return 0;
+    
+    
 }

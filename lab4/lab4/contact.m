@@ -9,27 +9,19 @@
 #import "contact.h"
 
 @implementation contact
--(instancetype)initWithname:(NSString*)name andemail:(NSString*)email andid :(NSString*)id andnumber:(NSInteger)number
+
+- (instancetype)initWithName: (NSString *) name andEmail: (NSString *) email
 {
-    self=[super init];
-    if(self){
+    self = [super init];
+    if (self) {
         _name = name;
         _email = email;
-        _id = id;
-    }else if(self){
-        _number = number;
     }
     return self;
 }
--(NSString *)description
-{
-    
-    return [NSString stringWithFormat: @"<%@>(%@)(%@)" ,self.name,self.email,self.id];
-    
-}
--(NSInteger ) number
-{
-    return[NSNumber numberWithUnsignedInteger:@"%@d"];
+
+- (NSString *)description{
+    return [NSString stringWithFormat:@" <%@>  <%@> ",self.name,self.email];
 }
 
 @end

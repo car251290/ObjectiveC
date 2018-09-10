@@ -8,32 +8,50 @@
 
 #import "ContactList.h"
 
-@implementation ContactList
--(instancetype)init{
-    self =[super init];
-    if(self){
-        _contactList=[NSMutableArray new];
+@implementation contactList
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _contactList = [NSMutableArray array];
         
     }
     return self;
 }
-//check if it existe
--(void)addcontact : (contact *)newcontact{
-    [_contactList addObject: newcontact];
+
+-(void) addContact: (contact *) newContact{
+    [_contactList addObject: newContact];
+    
 }
 
--(NSString *)description
-{
+- (NSString *)description{
     NSMutableString *result = [NSMutableString new];
     int count = 0;
-    for (contact *contact in _contactList){
-        NSString *contactStr = [NSString stringWithFormat:@"@%d:%@/n", count,contact];
-        //NSInteger id = [contactStr @"%d",count,contact];
-        NSLog(@"%d: %@",count, contact);
+    for (contact *contact in _contactList) {
+        NSString *contactStr = [NSString stringWithFormat:@"%d: %@\n",count,contact];
         count++;
-        [result appendString:contactStr];
+        [result appendString: contactStr];
     }
+  
     return result;
+}
+
+- (contact *) findContact: (NSString *) checkword{
+    for(contact *contact in _contactList){
+        if([[contact name] isEqualToString:checkword] || [[contact email] isEqualToString:checkword]){
+            return contact;
+        }
+    }
+    return nil;
+}
+
+- (BOOL)findDuplicate:(NSString *) sameEmail{
+    for (contact *contact in _contactList) {
+        if([[contact email] isEqualToString:sameEmail]){
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 @end

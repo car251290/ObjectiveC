@@ -23,7 +23,18 @@
     NSString *result = [NSString stringWithCString:cstring encoding:NSUTF8StringEncoding];
     NSCharacterSet *whitespaceAndNewLine = [NSCharacterSet whitespaceAndNewlineCharacterSet];
     return [result stringByTrimmingCharactersInSet: whitespaceAndNewLine];
-    
+}
+-(NSString *)description{
+    int count = 0;
+    NSMutableString *result = [NSMutableString new];
+    NSInteger arrayLength = [inputHistory count] - 1;
+    while(count < 3){
+        NSString *commandHistory = [NSString stringWithFormat:@"%@", _inputHistory[arrayLength]];
+        count++;
+        arrayLength--;
+        [result appendString:commandHistory];
+    }
+    return result;
 }
 
 @end
