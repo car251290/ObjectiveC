@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "contact.h"
 @interface ContactList : NSObject
-@property(nonatomic,strong) NSMutableArray *contactList;
--(void)addcontact : (contact *)newcontact;
+// NSArray -> array[]
+// NSMutableArray -> ArrayList<>()
+@property (nonatomic, strong) NSMutableArray *contactList;
+- (void) addContact: (contact *) newContact;
+- (NSString *) showDetailsAtIndex: (int) id;
+- (BOOL) isDublicate: (NSString *)email;
+- (int) find: (NSString *)keyword;
 @end

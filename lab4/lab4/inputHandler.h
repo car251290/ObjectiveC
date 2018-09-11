@@ -8,10 +8,8 @@
 #import <Foundation/Foundation.h>
 
 @interface inputHandler : NSObject
-+ (NSString *)getUserInputWithLength:(int) maxLength widthPrompt : (NSString* )prompt;
-@property (nonatomic,copy) NSString *copied;
-@property (nonatomic,strong) NSMutableArray *inputHistory;
-+ (NSString *)getUserInputWithLength: (int) maxLength withPrompt: (NSString *) prompt;
--(void) addHistory:(inputHandler *) addHistory;
--(NSString *)description;
+@property (nonatomic, strong) NSMutableArray *commandHistory;
+- (NSString *) getUserInputWithLength: (int) maxLength withPrompt: (NSString *)prompt;
+- (NSString *) getUserInputWithoutNewLine: (NSString *)prompt andLength: (int) maxLength;
+- (void) showCommandHistory;
 @end

@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
 @interface contact : NSObject
-@property(nonatomic,strong)NSString *name;
-@property(nonatomic,strong)NSString *email;
-@property(nonatomic,strong)NSString *id;
-@property(nonatomic,assign)NSInteger number;
--(instancetype)initWithname:(NSString*)name andemail:(NSString*)email andid :(NSString*)id andnumber:(NSInteger)number;
+@property (nonatomic, assign) int id;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSString * email;
+@property (nonatomic, strong) NSMutableDictionary * phoneBook;
+
+- (instancetype)initWithName: (NSString *) name andEmail: (NSString *)email andPhone: (NSMutableDictionary *)phoneBook;
 @end

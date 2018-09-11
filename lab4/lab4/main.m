@@ -12,47 +12,78 @@
 #import "ContactList.h"
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        ContactList *contactList = [[ContactList alloc]init];
-        inputHandler *inputHistory = [inputHandler new];
-        
+        ContactList *contactList = [[ContactList alloc] init];
+        inputHandler *InputHandler = [inputHandler new];
         while (true) {
-            NSString *menu = @"\nWhat would you like to do next?\nnew - Create a new contact\nlist - List all contacts\nquit - Exit Applicatiom\n> _";
-            NSString * option = [inputHandler getUserInputWithLength:20 widthPrompt:menu];
-            NSLog(@"%@", option);
+            NSString *menu = @"\nWhat would you like to do next?\nnew - Create a new contact\nlist - List all contacts\nshow - See details\nfind keyword - search for the contact information by the keyword\nquit - Exit Application\n> ";
+            
+            
+            NSString *option = [InputHandler getUserInputWithLength:20 withPrompt:menu];
             
             if ([option isEqualToString:@"quit"]) {
                 break;
-            }else if([option isEqualToString:@"new"]){
-                NSString *name = [inputHandler getUserInputWithLength:255 widthPrompt:@"Input the name: "];
-                NSString *email = [inputHandler getUserInputWithLength:255 widthPrompt:@"Input the email: "];
+            } else if ([option isEqualToString:@"new"]) {
+                // 1. get user input for name and email
+                NSString *email = [InputHandler getUserInputWithLength:255 withPrompt:@"\nEnter the email: "];
                 
-                if([ContactList findDuplicate:email] == TRUE){
-                    NSLog(@"This Email already exists");
-                }else{
+                if ([contactList isDublicate:email]) {
+                    NSLog(@"\nThe email is already added in the contact list");
+                } else {
+                    NSString *name = [InputHandler getUserInputWithLength:255 withPrompt:@"\nEnter the name: "];
+                    NSMutableDictionary *phoneBook = [NSMutableDictionary dictionary];
                     
-                    contact *newcontact = [[contact alloc] initWithName:name andEmail:email];
-                    
-                    [contactList addcontact:newcontact];
+                    while (true) {
+                        NSString *phoneOption = [InputHandler getUserInputWithLength:10 withPrompt:@"\nDo you want to add phone number? (y/n)"];
+                        if ([phoneOption isEqualToString:@"n"]) {
+                            break;
+                        } else if ([phoneOption isEqualToString:@"y"]) {
+                            NSString *phone = [InputHandler getUserInputWithLength:20 withPrompt:@"\nEnter the phone number: "];
+                            NSString *phoneLabel = [InputHandler getUserInputWithLength:30 withPrompt:@"\nChoose [home / work / mobile]"];
+                            if ([phoneLabel isEqualToString:@"home"]) {
+                                
+                                [phoneBook setObject:phone forKey:@"home"];
+                                NSLog(@"\nSuccessfully added. You can add another phone number.");
+                            } else if ([phoneLabel isEqualToString:@"work"]){
+                                [phoneBook setObject:phone forKey:@"work"];
+                                NSLog(@"\nSuccessfully added. You can add another phone number.");
+                            } else if ([phoneLabel isEqualToString:@"mobile"]) {
+                                [phoneBook setObject:phone forKey:@"mobile"];
+                                NSLog(@"\nSuccessfully added. You can add another phone number.");
+                            } else {
+                                NSLog(@"\nInvalid input. Choose again.");
+                            }
+                            
+                        }
+                    }
+                    // 2.  contact object based on the user input
+                    contact *newcontact = [[contact alloc] initWithName:name andEmail:email andPhone:phoneBook];
+                    // 3. add  contact to ContactList's contactList
+                    [contactList addContact:newcontact];
                 }
                 
-            }else if ([option isEqualToString:@"list"]){
-                NSLog(@"%@", contactList);
-                
-            }else if([option isEqualToString:@"find"]){
-                [[inputHistory inputHistory]addObject:option];
-                NSString *search = [inputHandler getUserInputWithLength:255 withPrompt:@"Enter the search word"];
-                 contact *result = [ContactList findcontact:search];
-                if(result != nil){
-                    NSLog(@"<%@> (%@)",[result name],[result email]);
-                }else{
-                    NSLog(@"%@", @"Not found");
+            } else if ([option isEqualToString:@"list"]) {
+                NSLog(@"%@", contactList);;
+            } else if ([option isEqualToString:@"show"]) {
+                NSString *phoneBookId = [InputHandler getUserInputWithLength:10 withPrompt:@"\nEnter the id: "];
+                NSLog(@"%@", [contactList showDetailsAtIndex:[phoneBookId intValue]]);
+            } else if ([option containsString:@"find"]){
+                NSArray *option_array = [option componentsSeparatedByString:@" "];
+                NSString *find_option = [option_array objectAtIndex:0];
+                if ([option_array count] > 1) {
+                    if ([find_option isEqualToString:@"find"]) {
+                        NSString *keyword = [option_array objectAtIndex:1];
+                        if (keyword != NULL) {
+                            NSLog(@"%@",[contactList showDetailsAtIndex:[contactList find:keyword]]);
+                        }
+                    }
                 }
-            }else if([option isEqualToString:@"history"]){
-                NSLog(@"%@", inputHistory);
-                [[inputhistory inputhistory]addObject:option];
+                
+            } else if ([option isEqualToString:@"history"]) {
+                [InputHandler showCommandHistory];
             }
         }
     }
+    return 0;
     
     
 }

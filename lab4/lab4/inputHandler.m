@@ -10,31 +10,58 @@
 
 @implementation inputHandler
 
-+ (NSString *)getUserInputWithLength:(int) maxLength widthPrompt : (NSString *)prompt {
-    // get c string
-    // get rid of whitespaces
-    
-    if(maxLength < 1){
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _commandHistory = [NSMutableArray new];
+    }
+    return self;
+}
+
+- (NSString *) getUserInputWithLength: (int) maxLength withPrompt: (NSString *)prompt{
+    if (maxLength < 1) {
         maxLength = 255;
     }
-    NSLog(@"%@", prompt);
+    
+    NSLog(@"%@",prompt);
     char inputChars[maxLength];
-    const char *cstring = fgets(inputChars, maxLength,stdin);
+    
+    const char *cstring = fgets(inputChars,maxLength,stdin);
     NSString *result = [NSString stringWithCString:cstring encoding:NSUTF8StringEncoding];
     NSCharacterSet *whitespaceAndNewLine = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    return [result stringByTrimmingCharactersInSet: whitespaceAndNewLine];
-}
--(NSString *)description{
-    int count = 0;
-    NSMutableString *result = [NSMutableString new];
-    NSInteger arrayLength = [inputHistory count] - 1;
-    while(count < 3){
-        NSString *commandHistory = [NSString stringWithFormat:@"%@", _inputHistory[arrayLength]];
-        count++;
-        arrayLength--;
-        [result appendString:commandHistory];
-    }
+    result = [result stringByTrimmingCharactersInSet:whitespaceAndNewLine];
+    [_commandHistory addObject:result];
     return result;
+}
+
+- (NSString *) getUserInputWithoutNewLine: (NSString *)prompt andLength: (int) maxLength{
+    if (maxLength < 1) {
+        maxLength = 255;
+    }
+    
+    NSLog(@"%@",prompt);
+    char inputChars[maxLength];
+    
+    const char *cstring = fgets(inputChars,maxLength,stdin);
+    NSString *result = [NSString stringWithCString:cstring encoding:NSUTF8StringEncoding];
+    NSCharacterSet *newLine = [NSCharacterSet newlineCharacterSet];
+    result = [result stringByTrimmingCharactersInSet:newLine];
+    return result;
+}
+
+- (void) showCommandHistory{
+    int i = 0;
+    while ([self.commandHistory count] > 3) {
+        [self.commandHistory removeObjectAtIndex:i];
+    }
+    NSMutableString *last3comand = [NSMutableString new];
+    for (NSString *command in self.commandHistory) {
+        [last3comand appendString:@"\n"];
+        [last3comand appendString:command];
+    }
+    NSLog(@"%@", last3comand);
+    
 }
 
 @end

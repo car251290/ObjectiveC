@@ -8,50 +8,78 @@
 
 #import "ContactList.h"
 
-@implementation contactList
+@implementation ContactList
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _contactList = [NSMutableArray array];
-        
+        _contactList = [[NSMutableArray alloc] init]; // init with size = 0
+        // [NSMutableArray new]
+        // [NSMutableArray array]
     }
     return self;
 }
 
--(void) addContact: (contact *) newContact{
-    [_contactList addObject: newContact];
-    
+- (void) addContact: (contact *) newContact {
+    [_contactList addObject:newContact];
 }
 
-- (NSString *)description{
+- (NSString *)description {
     NSMutableString *result = [NSMutableString new];
     int count = 0;
+    
     for (contact *contact in _contactList) {
-        NSString *contactStr = [NSString stringWithFormat:@"%d: %@\n",count,contact];
+        NSString *contactStr = [NSString stringWithFormat:@"\n#:%d %@", count, contact];
         count++;
-        [result appendString: contactStr];
+        [result appendString:contactStr];
     }
-  
     return result;
 }
 
-- (contact *) findContact: (NSString *) checkword{
-    for(contact *contact in _contactList){
-        if([[contact name] isEqualToString:checkword] || [[contact email] isEqualToString:checkword]){
-            return contact;
-        }
+- (NSString *) showDetailsAtIndex: (int) id {
+    if (id > [self.contactList count] || id < 0) {
+        return @"not found";
     }
-    return nil;
+    contact *contact = [self.contactList objectAtIndex:id];
+    NSMutableString *phoneInfo = [NSMutableString new];
+    for (NSString *key in [contact.phoneBook allKeys]){
+        [phoneInfo appendString:@"Phone("];
+        [phoneInfo appendString:key];
+        [phoneInfo appendString:@"): "];
+        [phoneInfo appendString:[contact.phoneBook valueForKey:key]];
+        [phoneInfo appendString:@"\n"];
+    }
+    NSString *details = [NSString stringWithFormat:@"\nName: %@\nEmail: %@\n%@",contact.name, contact.email, phoneInfo];
+    return details;
 }
 
-- (BOOL)findDuplicate:(NSString *) sameEmail{
-    for (contact *contact in _contactList) {
-        if([[contact email] isEqualToString:sameEmail]){
-            return TRUE;
+- (BOOL) isDublicate: (NSString *)email {
+    if ([self.contactList count] == 0) {
+        return false;
+    }
+    for (contact *contact in self.contactList) {
+        if ([contact.email isEqualToString:email]) {
+            return true;
         }
     }
-    return FALSE;
+    return false;
+}
+
+- (int) find: (NSString *)keyword {
+    int id = 0;
+    if ([self.contactList count] == 0) {
+        return -1;
+    }
+    for (contact *contact in self.contactList) {
+        if ([contact.name containsString:keyword]) {
+            return id;
+        }
+        if ([contact.email containsString:keyword]) {
+            return id;
+        }
+        id++;
+    }
+    return -1;
 }
 
 @end
